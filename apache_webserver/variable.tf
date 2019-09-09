@@ -1,5 +1,5 @@
 variable "prefix" {
-    default = "sth3be"
+    default = "heiko"
 }
 
 variable "location" {
