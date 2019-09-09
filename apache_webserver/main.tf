@@ -51,7 +51,7 @@ resource "azurerm_virtual_machine" "apache_web_server_vm" {
     location            = "${var.location}"
     resource_group_name = "${azurerm_resource_group.apache_web_server_rg.name}"
     network_interface_ids = ["${azurerm_network_interface.apache_web_server_nic.id}"]
-    vm_size        = "Standard_B1ls"
+    vm_size        = "Standard_D2s_v3"
     
     delete_os_disk_on_termination = true
     delete_data_disks_on_termination = true
@@ -126,7 +126,8 @@ resource "azurerm_virtual_machine_extension" "apache_web_server_installation" {
 
     settings = <<SETTINGS
         {
-            "commandToExecute": "apt-get update && apt-get install apache2 -y && apt-get install php libapache2-mod-php -y && service apache2 start"
+            "fileUris": ["https://raw.githubusercontent.com/heikostumpf/terraform.azure/master/apache_webserver/instance.php"],
+            "commandToExecute": "apt-get update && apt-get install apache2 -y && cp instance.php /var/www/html && chmod 644 /var/www/html/instance.php && apt-get install php libapache2-mod-php -y && service apache2 start"
         }
     SETTINGS
 }
